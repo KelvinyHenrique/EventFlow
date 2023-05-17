@@ -6,7 +6,7 @@ export interface UserProps {
   phone: string;
   name: string;
   password: string;
-  createdAt: Date;
-  updatedAt: Date;
+  createdAt?: Date;
+  updatedAt?: Date;
   order?: Order[];
 }

@@ -14,8 +14,6 @@ export class Order {
       createdAt: new Date(),
       updatedAt: new Date(),
     };
-
-    Object.freeze(this);
   }
 
   get id(): string {

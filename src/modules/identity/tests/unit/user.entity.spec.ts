@@ -1,7 +1,7 @@
 import { randomUUID } from 'crypto';
-import { User } from '../entities/user.entity';
-import { Order } from '../entities/order.entity';
-import { Email } from '../entities/value-objects/email.entity';
+import { User } from '../../entities/user.entity';
+import { Order } from '../../entities/order.entity';
+import { Email } from '../../entities/value-objects/email.entity';
 import { faker } from '@faker-js/faker';
 
 describe('User', () => {
