@@ -55,7 +55,6 @@ describe('DeleteUserService', () => {
   expect(userRepository.create).toHaveBeenCalledWith(expect.objectContaining(userProps));
 });
 
-
   it('should delete a user', async () => {
     jest.spyOn(userRepository, 'delete').mockResolvedValue();
     await deleteUserService.execute(createdUser.id);
