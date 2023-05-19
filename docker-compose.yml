@@ -24,16 +24,6 @@ services:
     depends_on:
       - postgres
 
-  event-flow:
-    build: .
-    container_name: event-flow
-    volumes:
-      - ./services/backend/event-flow:/usr/src/app
-    ports:
-      - "3000:3000"
-    depends_on:
-      - postgres
-
 volumes:
   postgres_volume_local:
 

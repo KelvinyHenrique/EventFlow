@@ -17,6 +17,7 @@ export class InMemoryUserRepository implements UserRepository {
 
   async search(searchParams: SearchUserDto): Promise<User[]> {
     return this.users.filter((user) => {
+
       if (searchParams.email && user.email !== searchParams.email) {
         return false;
       }
