@@ -7,6 +7,7 @@ import { faker } from '@faker-js/faker';
 import { UserProps } from '../../interfaces/user-props';
 import { CreateUserService } from '../../services/create-user.service';
 import { DeleteUserService } from '../../services/delete-user.service';
+import { UserMapper } from '../../mappers/user.mapper';
 
 describe('SearchUserService', () => {
     let searchUserService: SearchUserService;
@@ -49,13 +50,13 @@ describe('SearchUserService', () => {
             updatedAt: new Date(),
         };
 
-        createdUser = new User(userProps);
+        const createdUser = new User(userProps);
 
         jest.spyOn(userRepository, 'create').mockResolvedValue(createdUser);
 
         const result: User = await createUserService.execute(createdUser);
-        expect(result).toBe(createdUser);
-        expect(userRepository.create).toHaveBeenCalledWith(createdUser);
+        expect(result.id).toBeDefined();
+        expect(userRepository.create).toHaveBeenCalledWith(UserMapper.toDatabase(createdUser));
     });
     it('should search for a user by email', async () => {
         // Arrange

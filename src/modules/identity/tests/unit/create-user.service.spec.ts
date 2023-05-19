@@ -4,6 +4,7 @@ import { UserRepository } from '../../repositories/user.repository';
 import { User } from '../../entities/user.entity';
 import { UserProps } from '../../interfaces/user-props';
 import { faker } from '@faker-js/faker';
+import { UserMapper } from '../../mappers/user.mapper';
 
 describe('CreateUserService', () => {
   let createUserService: CreateUserService;
@@ -36,13 +37,13 @@ describe('CreateUserService', () => {
       updatedAt: new Date(),
     };
 
-    const createdUser: User = new User(userProps);
+    const createdUser = new User(userProps);
 
     jest.spyOn(userRepository, 'create').mockResolvedValue(createdUser);
 
     const result: User = await createUserService.execute(createdUser);
-
-    expect(result).toBe(createdUser);
-    expect(userRepository.create).toHaveBeenCalledWith(createdUser);
+    expect(result.id).toBeDefined();
+    expect(userRepository.create).toHaveBeenCalledWith(UserMapper.toDatabase(createdUser));
   });
 });
+

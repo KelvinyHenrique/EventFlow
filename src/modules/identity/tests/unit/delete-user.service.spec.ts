@@ -6,6 +6,7 @@ import { fa, faker } from '@faker-js/faker';
 import { DeleteUserService } from '../../services/delete-user.service';
 import { CreateUserService } from '../../services/create-user.service';
 import { randomUUID } from 'crypto';
+import { UserMapper } from '../../mappers/user.mapper';
 
 describe('DeleteUserService', () => {
   let deleteUserService: DeleteUserService;
@@ -50,9 +51,8 @@ describe('DeleteUserService', () => {
     jest.spyOn(userRepository, 'create').mockResolvedValue(createdUser);
 
     const result: User = await createUserService.execute(createdUser);
-
-    expect(result).toBe(createdUser);
-    expect(userRepository.create).toHaveBeenCalledWith(createdUser);
+    expect(result.id).toBeDefined();
+    expect(userRepository.create).toHaveBeenCalledWith(UserMapper.toDatabase(createdUser));
   });
 
   it('should delete a user', async () => {

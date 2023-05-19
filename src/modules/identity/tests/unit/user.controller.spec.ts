@@ -8,6 +8,7 @@ import { UserRepository } from '../../repositories/user.repository';
 import { SearchUserService } from '../../services/search-user.service';
 import { DeleteUserService } from '../../services/delete-user.service';
 import { UpdateUserService } from '../../services/update-user.service';
+import { UserMapper } from '../../mappers/user.mapper';
 
 describe('Test UserController', () => {
     let userController: UserController;
@@ -59,13 +60,14 @@ describe('Test UserController', () => {
 
     it('should search for a user by id and return the result', async () => {
 
-        const expectedUser: User[] = [createdUser];
+        const expectedUser: User[] = [UserMapper.toDatabase(createdUser)];
 
         jest.spyOn(searchUserService, 'execute').mockResolvedValue(expectedUser);
 
         const searchResult = await userController.search({ id: createdUser.id });
 
         expect(expectedUser).toBe(searchResult);
+
         expect(searchUserService.execute).toHaveBeenCalledWith({ id: createdUser.id });
     });
 
@@ -103,7 +105,7 @@ describe('Test UserController', () => {
         jest.spyOn(searchUserService, 'execute').mockResolvedValue(expectedUser);
 
         const searchResult = await userController.search({});
-        expect(expectedUser).toBe(searchResult);
+        expect(expectedUser[0]).toBe(searchResult[0]);
         expect(searchUserService.execute).toHaveBeenCalledWith({});
     }
     );

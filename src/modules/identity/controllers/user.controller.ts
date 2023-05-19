@@ -27,7 +27,7 @@ export class UserController {
     }
 
     @Delete()
-    async delete(@Query() id: string) {
+    async delete(@Query('id') id: string) {
         return await this.deleteUserService.execute(id);
     }
 
