@@ -15,4 +15,4 @@ import { IdentityModule } from './modules/identity/identity.module';
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule {}
+export class AppModule { }

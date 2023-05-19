@@ -3,6 +3,7 @@ import { UserProps } from '../interfaces/user-props';
 import { Order } from './order.entity';
 import { Email } from './value-objects/email.entity';
 import { BaseEntity } from './base.entity';
+import * as crypto from 'crypto';
 
 export class User extends BaseEntity {
   private props: UserProps;
@@ -54,7 +55,8 @@ export class User extends BaseEntity {
   }
 
   set password(value: string) {
-    this.props.password = value;
+    const hash = crypto.createHash('md5').update(value).digest('hex');
+    this.props.password = hash;
   }
 
   get createdAt(): Date {

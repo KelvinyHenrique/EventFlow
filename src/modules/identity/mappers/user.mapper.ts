@@ -6,16 +6,16 @@ export class UserMapper {
         if (Array.isArray(user)) {
             return user.map((u) => this.toResponse(u));
         }
-        const { id, email, phone, name } = user;
-        return { id, email, phone, name };
+        const { id, email, phone, name, password, order } = user;
+        return { id, email, phone, name, password, order };
     }
 
     static toDatabase(user: User): any {
         if (Array.isArray(user)) {
             return user.map((u) => this.toDatabase(u));
         }
-        const { id, email, phone, name, createdAt, updatedAt } = user;
-        return { id, email, phone, name, createdAt, updatedAt };
+        const { id, email, phone, name, password, order, createdAt, updatedAt } = user;
+        return { id, email, phone, name, createdAt, password, order, updatedAt };
     }
 
 }
