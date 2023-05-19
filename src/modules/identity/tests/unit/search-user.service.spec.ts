@@ -50,7 +50,7 @@ describe('SearchUserService', () => {
             updatedAt: new Date(),
         };
 
-        const createdUser = new User(userProps);
+        createdUser = new User(userProps);
 
         jest.spyOn(userRepository, 'create').mockResolvedValue(createdUser);
 

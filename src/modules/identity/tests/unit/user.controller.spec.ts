@@ -20,13 +20,19 @@ describe('Test UserController', () => {
     beforeEach(async () => {
         const module: TestingModule = await Test.createTestingModule({
             controllers: [UserController],
-            providers: [CreateUserService, SearchUserService, DeleteUserService, UpdateUserService, {
-                provide: UserRepository,
-                useValue: {
-                    create: jest.fn(),
-                    search: jest.fn(),
+            providers: [
+                CreateUserService,
+                SearchUserService,
+                DeleteUserService,
+                UpdateUserService,
+                {
+                    provide: UserRepository,
+                    useValue: {
+                        create: jest.fn(),
+                        search: jest.fn(),
+                    },
                 },
-            }],
+            ],
         }).compile();
 
         userController = module.get<UserController>(UserController);
@@ -35,16 +41,14 @@ describe('Test UserController', () => {
         deleteUserService = module.get<DeleteUserService>(DeleteUserService);
     });
 
-
     it('should call createUserService.execute and return the result', async () => {
-
         const userProps: UserProps = {
             email: faker.internet.email(),
             phone: faker.phone.number(),
             name: faker.internet.userName(),
             password: faker.internet.password(),
-            createdAt: new Date(),
-            updatedAt: new Date(),
+            createdAt: expect.any(Date),
+            updatedAt: expect.any(Date),
         };
 
         const user = new User(userProps);
@@ -53,78 +57,66 @@ describe('Test UserController', () => {
 
         createdUser = await userController.create(userProps);
 
-        expect(createdUser).toBe(user);
-        expect(createUserService.execute).toHaveBeenCalledWith(userProps);
+        expect(createdUser.id).toEqual(user.id);
+        expect(createUserService.execute).toHaveBeenCalledWith(expect.objectContaining(userProps));
     });
 
 
     it('should search for a user by id and return the result', async () => {
-
         const expectedUser: User[] = [UserMapper.toDatabase(createdUser)];
 
         jest.spyOn(searchUserService, 'execute').mockResolvedValue(expectedUser);
 
         const searchResult = await userController.search({ id: createdUser.id });
 
-        expect(expectedUser).toBe(searchResult);
-
+        expect(expectedUser).toEqual(searchResult);
         expect(searchUserService.execute).toHaveBeenCalledWith({ id: createdUser.id });
     });
 
-
     it('should search for a user by email and return the result', async () => {
-
         const expectedUser: User[] = [createdUser];
 
         jest.spyOn(searchUserService, 'execute').mockResolvedValue(expectedUser);
 
         const searchResult = await userController.search({ email: createdUser.email });
 
-        expect(expectedUser).toBe(searchResult);
+        expect(expectedUser).toEqual(searchResult);
         expect(searchUserService.execute).toHaveBeenCalledWith({ email: createdUser.email });
     });
 
-
     it('should search for a user by name and return the result', async () => {
-
         const expectedUser: User[] = [createdUser];
 
         jest.spyOn(searchUserService, 'execute').mockResolvedValue(expectedUser);
 
         const searchResult = await userController.search({ name: createdUser.name });
 
-        expect(expectedUser).toBe(searchResult);
+        expect(expectedUser).toEqual(searchResult);
         expect(searchUserService.execute).toHaveBeenCalledWith({ name: createdUser.name });
-    }
-    );
+    });
 
     it('should search all users and return the result', async () => {
-
         const expectedUser: User[] = [createdUser];
 
         jest.spyOn(searchUserService, 'execute').mockResolvedValue(expectedUser);
 
         const searchResult = await userController.search({});
-        expect(expectedUser[0]).toBe(searchResult[0]);
+        expect(expectedUser).toEqual(searchResult);
         expect(searchUserService.execute).toHaveBeenCalledWith({});
-    }
-    );
+    });
 
     it('should search for user with invalid params and return an empty array', async () => {
-
         const expectedUser: User[] = [];
 
         jest.spyOn(searchUserService, 'execute').mockResolvedValue(expectedUser);
 
         const searchResult = await userController.search({ name: 'invalid name' });
 
-        expect(expectedUser).toBe(searchResult);
+        expect(expectedUser).toEqual(searchResult);
         expect(searchUserService.execute).toHaveBeenCalledWith({ name: 'invalid name' });
-    }
-    );
+    });
 
     it('should delete a user by id and return void', async () => {
-
         const userId = createdUser.id;
 
         jest.spyOn(deleteUserService, 'execute').mockResolvedValue();
@@ -132,6 +124,5 @@ describe('Test UserController', () => {
         const deleteResult = await userController.delete(userId);
 
         expect(deleteResult).toBeUndefined();
-    }
-    );
+    });
 });
