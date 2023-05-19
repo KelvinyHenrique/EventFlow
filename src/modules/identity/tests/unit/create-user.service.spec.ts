@@ -3,7 +3,7 @@ import { CreateUserService } from '../../services/create-user.service';
 import { UserRepository } from '../../repositories/user.repository';
 import { User } from '../../entities/user.entity';
 import { UserProps } from '../../interfaces/user-props';
-import { fa, faker } from '@faker-js/faker';
+import { faker } from '@faker-js/faker';
 
 describe('CreateUserService', () => {
   let createUserService: CreateUserService;
