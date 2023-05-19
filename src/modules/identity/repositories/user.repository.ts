@@ -1,3 +1,4 @@
+import { SearchUserDto } from '../dto/search-user.dto';
 import { User } from '../entities/user.entity';
 
 export abstract class UserRepository {
@@ -6,4 +7,5 @@ export abstract class UserRepository {
   abstract create(user: User): Promise<User>;
   abstract update(user: User): Promise<User>;
   abstract delete(id: string): Promise<void>;
+  abstract search(searchParams: SearchUserDto): Promise<User[]>;
 }
