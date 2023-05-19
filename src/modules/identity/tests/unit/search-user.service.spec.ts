@@ -53,10 +53,9 @@ describe('SearchUserService', () => {
 
         jest.spyOn(userRepository, 'create').mockResolvedValue(createdUser);
 
-        const result: User = await createUserService.execute(userProps);
-
+        const result: User = await createUserService.execute(createdUser);
         expect(result).toBe(createdUser);
-        expect(userRepository.create).toHaveBeenCalledWith(expect.objectContaining(userProps));
+        expect(userRepository.create).toHaveBeenCalledWith(createdUser);
     });
     it('should search for a user by email', async () => {
         // Arrange

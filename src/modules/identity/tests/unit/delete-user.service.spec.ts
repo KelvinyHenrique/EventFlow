@@ -35,25 +35,25 @@ describe('DeleteUserService', () => {
     jest.clearAllMocks(); // Reset all mock function calls
   });
 
- it('should create a new user', async () => {
-  const userProps: UserProps = {
-    email: faker.internet.email(),
-    phone: faker.phone.number(),
-    name: faker.internet.userName(),
-    password: faker.internet.password(),
-    createdAt: new Date(),
-    updatedAt: new Date(),
-  };
+  it('should create a new user', async () => {
+    const userProps: UserProps = {
+      email: faker.internet.email(),
+      phone: faker.phone.number(),
+      name: faker.internet.userName(),
+      password: faker.internet.password(),
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    };
 
-  createdUser = new User(userProps);
+    createdUser = new User(userProps);
 
-  jest.spyOn(userRepository, 'create').mockResolvedValue(createdUser);
+    jest.spyOn(userRepository, 'create').mockResolvedValue(createdUser);
 
-  const result: User = await createUserService.execute(userProps);
+    const result: User = await createUserService.execute(createdUser);
 
-  expect(result).toBe(createdUser);
-  expect(userRepository.create).toHaveBeenCalledWith(expect.objectContaining(userProps));
-});
+    expect(result).toBe(createdUser);
+    expect(userRepository.create).toHaveBeenCalledWith(createdUser);
+  });
 
   it('should delete a user', async () => {
     jest.spyOn(userRepository, 'delete').mockResolvedValue();

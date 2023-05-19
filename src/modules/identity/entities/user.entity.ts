@@ -2,11 +2,13 @@ import { randomUUID } from 'crypto';
 import { UserProps } from '../interfaces/user-props';
 import { Order } from './order.entity';
 import { Email } from './value-objects/email.entity';
+import { BaseEntity } from './base.entity';
 
-export class User {
+export class User extends BaseEntity {
   private props: UserProps;
 
   constructor(props: Omit<UserProps, 'id'>, id: string = randomUUID()) {
+    super();
     this.props = props;
     this.id = id;
   }

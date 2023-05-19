@@ -8,7 +8,6 @@ export class UpdateUserService {
     constructor(private readonly userRepository: UserRepository) { }
 
     async execute(userProps: UserProps): Promise<User> {
-        const user = new User(userProps);
-        return await this.userRepository.update(user);
+        return await this.userRepository.update(userProps);
     }
 }
