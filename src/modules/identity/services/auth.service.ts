@@ -9,13 +9,11 @@ export class AuthService {
 
     async login(email: string, password: string) {
         const user = await this.userRepository.findByEmail(email);
-
         if (!user) {
             return false;
         }
 
-        const hash = crypto.createHash('md5').update(password).digest('hex');
-        if (user.password === hash) {
+        if (user.password === password) {
             return true;
         } else {
             return false;
