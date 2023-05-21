@@ -13,13 +13,11 @@ export class InMemoryEventRepository implements EventRepository {
 
   async search(searchParams: SearchEventDto): Promise<Event[]> {
     return this.event.filter((event) => {
-      if (
-        searchParams.start_date &&
-        searchParams.end_date &&
-        event.start_date >= searchParams.start_date &&
-        event.end_date <= searchParams.end_date
-      ) {
-        return true;
+      if (searchParams.name && event.name !== searchParams.name) {
+        return false;
+      }
+      if (searchParams.description && event.description !== searchParams.description) {
+        return false;
       }
       return true;
     });
