@@ -6,6 +6,7 @@ import { faker } from '@faker-js/faker';
 import { User } from '../../entities/user.entity';
 import { CreateUserService } from '../../services/create-user.service';
 import { UserMapper } from '../../mappers/user.mapper';
+import { InMemoryUserRepository } from '../../repositories/user-in-memory.repository';
 
 describe('AuthService', () => {
     let authService: AuthService;
@@ -19,10 +20,7 @@ describe('AuthService', () => {
                 CreateUserService,
                 {
                     provide: UserRepository,
-                    useValue: {
-                        findByEmail: jest.fn(),
-                        create: jest.fn(),
-                    },
+                    useClass: InMemoryUserRepository,
                 },
             ],
         }).compile();
@@ -49,7 +47,7 @@ describe('AuthService', () => {
             jest.spyOn(userRepository, 'findByEmail').mockResolvedValue(userDataToSave);
 
             // Act
-            const createdUser: User = await createUserService.execute(userDataToSave);
+            const createdUser: UserProps = await createUserService.execute(userDataToSave);
             const result = await authService.login(createdUser.email, userProps.password);
 
             // Assert

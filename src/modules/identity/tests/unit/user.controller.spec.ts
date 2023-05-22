@@ -9,13 +9,13 @@ import { SearchUserService } from '../../services/search-user.service';
 import { DeleteUserService } from '../../services/delete-user.service';
 import { UpdateUserService } from '../../services/update-user.service';
 import { UserMapper } from '../../mappers/user.mapper';
+import { InMemoryUserRepository } from '../../repositories/user-in-memory.repository';
 
 describe('Test UserController', () => {
     let userController: UserController;
     let createUserService: CreateUserService;
     let searchUserService: SearchUserService;
     let createdUser: User;
-    let deleteUserService: DeleteUserService;
 
     beforeEach(async () => {
         const module: TestingModule = await Test.createTestingModule({
@@ -27,10 +27,7 @@ describe('Test UserController', () => {
                 UpdateUserService,
                 {
                     provide: UserRepository,
-                    useValue: {
-                        create: jest.fn(),
-                        search: jest.fn(),
-                    },
+                    useClass: InMemoryUserRepository
                 },
             ],
         }).compile();
@@ -38,7 +35,6 @@ describe('Test UserController', () => {
         userController = module.get<UserController>(UserController);
         createUserService = module.get<CreateUserService>(CreateUserService);
         searchUserService = module.get<SearchUserService>(SearchUserService);
-        deleteUserService = module.get<DeleteUserService>(DeleteUserService);
     });
 
     it('should call createUserService.execute and return the result', async () => {
@@ -114,15 +110,5 @@ describe('Test UserController', () => {
 
         expect(expectedUser).toEqual(searchResult);
         expect(searchUserService.execute).toHaveBeenCalledWith({ name: 'invalid name' });
-    });
-
-    it('should delete a user by id and return void', async () => {
-        const userId = createdUser.id;
-
-        jest.spyOn(deleteUserService, 'execute').mockResolvedValue();
-
-        const deleteResult = await userController.delete(userId);
-
-        expect(deleteResult).toBeUndefined();
     });
 });

@@ -8,12 +8,12 @@ import { UserProps } from '../../interfaces/user-props';
 import { CreateUserService } from '../../services/create-user.service';
 import { DeleteUserService } from '../../services/delete-user.service';
 import { UserMapper } from '../../mappers/user.mapper';
+import { InMemoryUserRepository } from '../../repositories/user-in-memory.repository';
 
 describe('SearchUserService', () => {
     let searchUserService: SearchUserService;
     let userRepository: UserRepository;
     let createUserService: CreateUserService;
-    let deleteUserService: DeleteUserService;
     let createdUser: User;
 
 
@@ -25,11 +25,7 @@ describe('SearchUserService', () => {
                 DeleteUserService,
                 {
                     provide: UserRepository,
-                    useValue: {
-                        search: jest.fn(),
-                        create: jest.fn(),
-                        delete: jest.fn(),
-                    },
+                    useClass: InMemoryUserRepository,
                 },
             ],
         }).compile();
@@ -37,7 +33,6 @@ describe('SearchUserService', () => {
         searchUserService = module.get<SearchUserService>(SearchUserService);
         userRepository = module.get<UserRepository>(UserRepository);
         createUserService = module.get<CreateUserService>(CreateUserService);
-        deleteUserService = module.get<DeleteUserService>(DeleteUserService);
     });
 
     it('should create a new user', async () => {
@@ -54,7 +49,7 @@ describe('SearchUserService', () => {
 
         jest.spyOn(userRepository, 'create').mockResolvedValue(createdUser);
 
-        const result: User = await createUserService.execute(createdUser);
+        const result: UserProps = await createUserService.execute(createdUser);
         expect(result.id).toBeDefined();
         expect(userRepository.create).toHaveBeenCalledWith(UserMapper.toDatabase(createdUser));
     });
@@ -68,7 +63,7 @@ describe('SearchUserService', () => {
 
         jest.spyOn(userRepository, 'search').mockResolvedValue(expectedUsers);
 
-        const result: User[] = await searchUserService.execute(searchParams);
+        const result: UserProps[] = await searchUserService.execute(searchParams);
 
         expect(result).toEqual(expectedUsers);
         expect(userRepository.search).toHaveBeenCalledWith(searchParams);
@@ -83,7 +78,7 @@ describe('SearchUserService', () => {
 
         jest.spyOn(userRepository, 'search').mockResolvedValue(expectedUsers);
 
-        const result: User[] = await searchUserService.execute(searchParams);
+        const result: UserProps[] = await searchUserService.execute(searchParams);
 
         expect(result).toEqual(expectedUsers);
         expect(userRepository.search).toHaveBeenCalledWith(searchParams);
@@ -98,7 +93,7 @@ describe('SearchUserService', () => {
 
         jest.spyOn(userRepository, 'search').mockResolvedValue(expectedUsers);
 
-        const result: User[] = await searchUserService.execute(searchParams);
+        const result: UserProps[] = await searchUserService.execute(searchParams);
 
         expect(result).toEqual(expectedUsers);
         expect(userRepository.search).toHaveBeenCalledWith(searchParams);
@@ -113,7 +108,7 @@ describe('SearchUserService', () => {
 
         jest.spyOn(userRepository, 'search').mockResolvedValue(expectedUsers);
 
-        const result: User[] = await searchUserService.execute(searchParams);
+        const result: UserProps[] = await searchUserService.execute(searchParams);
 
         expect(result).toEqual(expectedUsers);
         expect(userRepository.search).toHaveBeenCalledWith(searchParams);

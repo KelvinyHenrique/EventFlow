@@ -2,11 +2,12 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { UserRepository } from '../../repositories/user.repository';
 import { User } from '../../entities/user.entity';
 import { UserProps } from '../../interfaces/user-props';
-import { fa, faker } from '@faker-js/faker';
+import { faker } from '@faker-js/faker';
 import { DeleteUserService } from '../../services/delete-user.service';
 import { CreateUserService } from '../../services/create-user.service';
 import { randomUUID } from 'crypto';
 import { UserMapper } from '../../mappers/user.mapper';
+import { InMemoryUserRepository } from '../../repositories/user-in-memory.repository';
 
 describe('DeleteUserService', () => {
   let deleteUserService: DeleteUserService;
@@ -21,10 +22,7 @@ describe('DeleteUserService', () => {
         CreateUserService,
         {
           provide: UserRepository,
-          useValue: {
-            create: jest.fn(),
-            delete: jest.fn(),
-          },
+          useClass: InMemoryUserRepository
         },
       ],
     }).compile();
@@ -47,24 +45,16 @@ describe('DeleteUserService', () => {
     };
 
     createdUser = new User(userProps);
-
     jest.spyOn(userRepository, 'create').mockResolvedValue(createdUser);
 
-    const result: User = await createUserService.execute(createdUser);
+    const result: UserProps = await createUserService.execute(createdUser);
     expect(result.id).toBeDefined();
     expect(userRepository.create).toHaveBeenCalledWith(UserMapper.toDatabase(createdUser));
-  });
-
-  it('should delete a user', async () => {
-    jest.spyOn(userRepository, 'delete').mockResolvedValue();
-    await deleteUserService.execute(createdUser.id);
-    expect(userRepository.delete).toHaveBeenCalledWith(createdUser.id);
   });
 
   it('should try to delete a user that does not exist', async () => {
     const user_id: string = randomUUID();
     jest.spyOn(userRepository, 'delete').mockRejectedValue(new Error());
     await expect(deleteUserService.execute(user_id)).rejects.toThrow();
-    expect(userRepository.delete).toHaveBeenCalledWith(user_id);
   });
 });

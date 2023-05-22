@@ -5,6 +5,8 @@ import { User } from '../../entities/user.entity';
 import { UserProps } from '../../interfaces/user-props';
 import { faker } from '@faker-js/faker';
 import { UserMapper } from '../../mappers/user.mapper';
+import { InMemoryEventRepository } from 'src/modules/event/repositories/event-in-memory.repository';
+import { InMemoryUserRepository } from '../../repositories/user-in-memory.repository';
 
 describe('CreateUserService', () => {
   let createUserService: CreateUserService;
@@ -16,9 +18,7 @@ describe('CreateUserService', () => {
         CreateUserService,
         {
           provide: UserRepository,
-          useValue: {
-            create: jest.fn(),
-          },
+          useClass: InMemoryUserRepository,
         },
       ],
     }).compile();
@@ -41,7 +41,7 @@ describe('CreateUserService', () => {
 
     jest.spyOn(userRepository, 'create').mockResolvedValue(createdUser);
 
-    const result: User = await createUserService.execute(createdUser);
+    const result: UserProps = await createUserService.execute(createdUser);
     expect(result.id).toBeDefined();
     expect(userRepository.create).toHaveBeenCalledWith(UserMapper.toDatabase(createdUser));
   });

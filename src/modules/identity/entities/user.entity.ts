@@ -55,8 +55,8 @@ export class User extends BaseEntity {
   }
 
   set password(value: string) {
-    const hash = crypto.createHash('md5').update(value).digest('hex');
-    this.props.password = hash;
+    //  const hash = crypto.createHash('md5').update(value).digest('hex');
+    this.props.password = value;
   }
 
   get createdAt(): Date {
