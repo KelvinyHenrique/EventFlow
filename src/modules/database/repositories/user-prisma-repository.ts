@@ -10,7 +10,7 @@ export class UserPrismaRepository implements UserRepository {
     }
 
     async findById(id: string): Promise<UserProps | undefined> {
-        const user = await this.prisma.user.findUnique({ where: { id } });
+        const user = await this.prisma.user.findUnique({ where: { id }, });
         return user ? user : undefined;
     }
 
@@ -23,6 +23,9 @@ export class UserPrismaRepository implements UserRepository {
         const { name, email, id } = searchParams;
 
         const users = await this.prisma.user.findMany({
+            include: {
+                event: true,
+            },
             where: {
                 name: {
                     contains: name,

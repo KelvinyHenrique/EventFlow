@@ -29,6 +29,17 @@ export class Event {
             this.createdAt = new Date();
         }
 
+        if (this.start_date) {
+            this.start_date = new Date(this.start_date);
+            if (isNaN(this.start_date.getTime())) {
+                throw new Error("Invalid date");
+            }
+        }
+
+        if (this.end_date) {
+            this.end_date = new Date(this.end_date);
+        }
+
         this.updatedAt = new Date();
     }
 }

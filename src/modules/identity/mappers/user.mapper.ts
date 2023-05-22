@@ -7,8 +7,8 @@ export class UserMapper {
         if (Array.isArray(user)) {
             return user.map((u) => this.toResponse(u));
         }
-        const { id, email, phone, name, password, order } = user;
-        return { id, email, phone, name, password, order };
+        const { id, email, phone, name, password, order, event } = user;
+        return { id, email, phone, name, password, order, event };
     }
 
     static toDatabase(user: UserProps): any {
