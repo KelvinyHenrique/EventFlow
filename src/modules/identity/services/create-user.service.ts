@@ -8,7 +8,7 @@ import { UserMapper } from '../mappers/user.mapper';
 export class CreateUserService {
   constructor(private readonly userRepository: UserRepository) { }
 
-  async execute(userProps: UserProps): Promise<User> {
+  async execute(userProps: UserProps): Promise<UserProps> {
     const user = new User(userProps); // TODO: encrypt password in the future
     const userToDatabase = UserMapper.toDatabase(user);
     return await this.userRepository.create(userToDatabase);

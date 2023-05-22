@@ -1,14 +1,14 @@
 import { Injectable } from "@nestjs/common";
-import { User } from "../entities/user.entity";
 import { UserRepository } from "../repositories/user.repository";
 import { SearchUserDto } from "../dto/search-user.dto";
+import { UserProps } from "../interfaces/user-props";
 
 
 @Injectable()
 export class SearchUserService {
-  constructor(private readonly userRepository: UserRepository) {}
+  constructor(private readonly userRepository: UserRepository) { }
 
-    async execute(searchParams: SearchUserDto): Promise<User[]> {
-        return await this.userRepository.search(searchParams);
+  async execute(searchParams: SearchUserDto): Promise<UserProps[]> {
+    return await this.userRepository.search(searchParams);
   }
 }

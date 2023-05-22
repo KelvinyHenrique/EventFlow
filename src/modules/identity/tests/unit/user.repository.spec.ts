@@ -1,6 +1,6 @@
 import { Test } from '@nestjs/testing';
 import { UserProps } from '../../interfaces/user-props';
-import { InMemoryUserRepository } from '../../repositories/user-in-memory.reposity';
+import { InMemoryUserRepository } from '../../repositories/user-in-memory.repository';
 import { UserRepository } from '../../repositories/user.repository';
 import { User } from '../../entities/user.entity';
 import { faker } from '@faker-js/faker';

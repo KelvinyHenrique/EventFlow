@@ -1,0 +1,56 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["fullTextSearch", "fullTextIndex"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model user {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  phone     String   @unique
+  name      String
+  password  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  event     event[]
+  order     order[]
+}
+
+model event {
+  id          String   @id @default(uuid())
+  name        String
+  description String
+  start_date  DateTime
+  user_id     String
+  user        user     @relation(fields: [user_id], references: [id])
+  end_date    DateTime
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  street      String
+  number      String
+  city        String
+  state       String
+  country     String
+  zip_code    String
+  complement  String
+  order       order[]
+}
+
+model order {
+  id        String   @id @default(uuid())
+  user_id   String
+  user      user     @relation(fields: [user_id], references: [id])
+  event_id  String
+  event     event    @relation(fields: [event_id], references: [id])
+  value     Float
+  quantity  Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
